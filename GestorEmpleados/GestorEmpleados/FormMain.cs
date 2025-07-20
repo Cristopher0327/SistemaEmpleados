@@ -44,6 +44,7 @@ namespace GestorEmpleados
         private void btnExportarCSV_Click(object sender, EventArgs e)
         {
             AbrirFormulario(new FormExportarCSV());
+            MessageBox.Show("Los datos fueron exportados a CSV.");
         }
 
         private void btnSalir_Click(object sender, EventArgs e)
