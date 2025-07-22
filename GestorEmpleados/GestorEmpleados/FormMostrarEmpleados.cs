@@ -8,13 +8,13 @@ namespace GestorEmpleados
         public FormMostrarEmpleados()
         {
             InitializeComponent();
-            // Configura el evento del botón cerrar
+            
+            // boton cerrar 
             btnCerrar.Click += BtnCerrar_Click;
 
-            // Configura otras propiedades si quieres
             dgvEmpleados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Evento Load del formulario
+        
             this.Load += FormMostrarEmpleados_Load;
         }
 
