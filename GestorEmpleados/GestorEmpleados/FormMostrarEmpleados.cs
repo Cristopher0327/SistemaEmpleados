@@ -11,10 +11,10 @@ namespace GestorEmpleados
         {
             InitializeComponent();
 
-            //botón cerrar
+            // Botón cerrar
             btnCerrar.Click += BtnCerrar_Click;
 
-            // Seleccion completa de la fila al hacer clic
+            // Selección completa de la fila al hacer clic
             dgvEmpleados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             // Evento que se ejecuta al cargar el formulario
