@@ -16,30 +16,28 @@ namespace GestorEmpleados
         public FormAgregarEmpleado()
         {
             InitializeComponent();
-            CargarComboBox();        // Llenar combo boxes con datos predefinidos
-            GenerarID();             // Generar ID automáticamente
-            AsociarValidaciones();  // Asignar validaciones de entradas
+            CargarComboBox();        
+            GenerarID();             
+            AsociarValidaciones();  
 
-            // Asociar eventos que recalculan los descuentos y tiempo automáticamente
+            // asociar eventos para mostrar descuentos y tiempo en empresa
             tbSalario.TextChanged += tbSalario_TextChanged;
             dtpFechaInicio.ValueChanged += dtpFechaInicio_ValueChanged;
         }
 
-        // Cargar los valores en los combos al abrir el formulario
         private void CargarComboBox()
         {
             cmbDepartamento.Items.AddRange(new string[] { "Administracion", "IT", "Recursos Humanos", "Ventas", "Contabilidad" });
             cmbEstado.Items.AddRange(new string[] { "Vigente", "No Vigente" });
         }
 
-        // Generar automáticamente el ID del empleado
         private void GenerarID()
         {
             tbIDempleado.Text = EmpleadoManager.GenerarNuevoID().ToString();
             tbIDempleado.ReadOnly = true;
         }
 
-        // Validar los campos para aceptar solo letras o números
+        // Validaciones: solo letras o solo números según campo
         private void AsociarValidaciones()
         {
             tbNombre.KeyPress += SoloLetras;
@@ -47,7 +45,6 @@ namespace GestorEmpleados
             tbSalario.KeyPress += SoloNumeros;
         }
 
-        // solo permite letras
         private void SoloLetras(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
@@ -56,7 +53,6 @@ namespace GestorEmpleados
             }
         }
 
-        // Solo permite numeros y punto decimal
         private void SoloNumeros(object sender, KeyPressEventArgs e)
         {
             TextBox tb = sender as TextBox;
@@ -72,28 +68,31 @@ namespace GestorEmpleados
             }
         }
 
-        // Cada vez que cambia el salario, recalcular descuentos
+        // Cuando cambia el salario, recalcular descuentos y tiempo
         private void tbSalario_TextChanged(object sender, EventArgs e)
         {
             CalcularDescuentosYTiempo();
         }
 
-        // cada vez que cambia la fecha de inicio, recalcular descuentos
+        // Cuando cambia la fecha de inicio, recalcular tiempo
         private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
         {
             CalcularDescuentosYTiempo();
         }
 
-        // Descuentos en las ARS, AFP e ISR y cálculo de tiempo en la empresa
+        // Descuentos: AFP, ARS, ISR y tiempo en empresa
         private void CalcularDescuentosYTiempo()
         {
             if (!decimal.TryParse(tbSalario.Text, out decimal salario) || salario <= 0)
             {
-                lblAFP.Text = lblARS.Text = lblISR.Text = lblTiempoEmpresa.Text = "N/D";
+                lblAFP.Text = "AFP";
+                lblARS.Text = "ARS";
+                lblISR.Text = "ISR";
+                lblTiempoEmpresa.Text = "Tiempo en la empresa: ";
                 return;
             }
 
-            // Calcular tiempo en la empresa
+            // Tiempo en empresa
             TimeSpan diferencia = DateTime.Now - dtpFechaInicio.Value;
             int años = diferencia.Days / 365;
             int meses = (diferencia.Days % 365) / 30;
@@ -101,13 +100,13 @@ namespace GestorEmpleados
 
             // AFP
             decimal afp = salario * 0.0287m;
-            lblAFP.Text = afp.ToString("C");
+            lblAFP.Text = $"${afp:N2}";
 
             // ARS
             decimal ars = salario * 0.0304m;
-            lblARS.Text = ars.ToString("C");
+            lblARS.Text = $"${ars:N2}";
 
-            // ISR calculado anual y luego convertido a mensual
+            // ISR
             decimal salarioAnual = salario * 12;
             decimal isr = 0;
 
@@ -124,13 +123,14 @@ namespace GestorEmpleados
                 isr = (salarioAnual - 416220) * 0.15m;
             }
 
-            lblISR.Text = isr > 0 ? (isr / 12).ToString("C") : "Exento";
+            lblISR.Text = isr > 0 ? $"${(isr / 12):N2}" : "Exento";
         }
 
-        // botón guardar
+        // Guardar empleado
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            // validar campos obligatorios
+
+            //validar lo campo obligatorios 
             if (tbNombre.Text.Trim() == "" || tbCargo.Text.Trim() == "" ||
                 cmbDepartamento.SelectedIndex == -1 || cmbEstado.SelectedIndex == -1 || tbSalario.Text.Trim() == "")
             {
@@ -138,21 +138,20 @@ namespace GestorEmpleados
                 return;
             }
 
-            // validar salario
+            //validar salario
             if (!decimal.TryParse(tbSalario.Text, out decimal salario) || salario <= 0)
             {
                 MessageBox.Show("Ingrese un salario válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // validar que la fecha no sea futura
+            //validar que la fecha no sea futura
             if (dtpFechaInicio.Value > DateTime.Now)
             {
                 MessageBox.Show("La fecha de inicio no puede ser futura.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // crear objeto empleado
             Empleado nuevoEmpleado = new Empleado
             {
                 ID = int.Parse(tbIDempleado.Text),
@@ -168,17 +167,17 @@ namespace GestorEmpleados
 
             MessageBox.Show("Empleado guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            LimpiarCampos();   // limpiar campos después de guardar
-            GenerarID();       // generar nuevo ID para siguiente empleado
+            LimpiarCampos();
+            GenerarID();
         }
 
-        // botón cancelar
+        // Cancelar y cerrar formulario
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        // limpiar los campos del formulario
+        // Limpiar todos los campos del formulario
         private void LimpiarCampos()
         {
             tbNombre.Clear();
@@ -191,6 +190,11 @@ namespace GestorEmpleados
             lblARS.Text = "ARS";
             lblISR.Text = "ISR";
             lblTiempoEmpresa.Text = "Tiempo en la empresa: ";
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            // Evento innecesario, puedes eliminarlo si no usas ese label
         }
     }
 }
