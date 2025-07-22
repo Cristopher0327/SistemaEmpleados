@@ -16,9 +16,13 @@ namespace GestorEmpleados
         public FormAgregarEmpleado()
         {
             InitializeComponent();
-            CargarComboBox(); // Llenar combo boxes con datos predefinidos
-            GenerarID();      // Generar ID automáticamente
-            AsociarValidaciones(); // Asignar validaciones de entradas
+            CargarComboBox();        // Llenar combo boxes con datos predefinidos
+            GenerarID();             // Generar ID automáticamente
+            AsociarValidaciones();  // Asignar validaciones de entradas
+
+            // Asociar eventos que recalculan los descuentos y tiempo automáticamente
+            tbSalario.TextChanged += tbSalario_TextChanged;
+            dtpFechaInicio.ValueChanged += dtpFechaInicio_ValueChanged;
         }
 
         // Cargar los valores en los combos al abrir el formulario
@@ -74,13 +78,13 @@ namespace GestorEmpleados
             CalcularDescuentosYTiempo();
         }
 
-        //cada vez que cambia la fecha de inicio, recalcular descuentos
+        // cada vez que cambia la fecha de inicio, recalcular descuentos
         private void dtpFechaInicio_ValueChanged(object sender, EventArgs e)
         {
             CalcularDescuentosYTiempo();
         }
 
-        // Descuentos en las ARS, AFP e ISR y calculo de tiempo en la empresa
+        // Descuentos en las ARS, AFP e ISR y cálculo de tiempo en la empresa
         private void CalcularDescuentosYTiempo()
         {
             if (!decimal.TryParse(tbSalario.Text, out decimal salario) || salario <= 0)
@@ -103,7 +107,7 @@ namespace GestorEmpleados
             decimal ars = salario * 0.0304m;
             lblARS.Text = ars.ToString("C");
 
-            // ISR calculado anual y luego convertido a mensual (asi es mas facil ;) <3 )
+            // ISR calculado anual y luego convertido a mensual
             decimal salarioAnual = salario * 12;
             decimal isr = 0;
 
@@ -123,7 +127,7 @@ namespace GestorEmpleados
             lblISR.Text = isr > 0 ? (isr / 12).ToString("C") : "Exento";
         }
 
-        // boton guardar
+        // botón guardar
         private void btnGuardar_Click(object sender, EventArgs e)
         {
             // validar campos obligatorios
@@ -164,11 +168,11 @@ namespace GestorEmpleados
 
             MessageBox.Show("Empleado guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            LimpiarCampos();   // limpiar campos despues de guardar
+            LimpiarCampos();   // limpiar campos después de guardar
             GenerarID();       // generar nuevo ID para siguiente empleado
         }
 
-        // boton cancelar
+        // botón cancelar
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             this.Close();
