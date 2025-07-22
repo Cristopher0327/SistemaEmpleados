@@ -80,7 +80,7 @@ namespace GestorEmpleados
             CalcularDescuentosYTiempo();
         }
 
-        // Descuentos: AFP, ARS, ISR y tiempo en empresa
+        // Descuentos de AFP, ARS, ISR y tiempo en empresa
         private void CalcularDescuentosYTiempo()
         {
             if (!decimal.TryParse(tbSalario.Text, out decimal salario) || salario <= 0)
@@ -194,7 +194,6 @@ namespace GestorEmpleados
 
         private void label1_Click(object sender, EventArgs e)
         {
-            // Evento innecesario, puedes eliminarlo si no usas ese label
         }
     }
 }
