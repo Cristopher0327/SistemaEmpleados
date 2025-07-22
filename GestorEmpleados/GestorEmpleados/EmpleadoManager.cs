@@ -23,7 +23,12 @@ namespace GestorEmpleados
             {
                 ListaEmpleados.Add(emp);
             }
-      
+
+        public static List<Empleado> ObtenerEmpleados()
+        {
+            return ListaEmpleados;
+        }
+
     }
 
 }
