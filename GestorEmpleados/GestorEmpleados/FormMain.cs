@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 
 namespace GestorEmpleados
 {
+    [DebuggerDisplay("{" + nameof(GetDebuggerDisplay) + "(),nq}")]
     public partial class FormMain : Form
     {
         public FormMain()
@@ -17,9 +19,6 @@ namespace GestorEmpleados
             InitializeComponent();
             IsMdiContainer = true;
         }
-        
-
-     
 
         private void btnMostrarEmpleados_Click(object sender, EventArgs e)
         {
@@ -28,7 +27,33 @@ namespace GestorEmpleados
 
         private void btnAgregarEmpleado_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormAgregarEmpleado());
+            var formAgregar = this.MdiChildren.OfType<FormAgregarEmpleado>().FirstOrDefault();
+
+            if (formAgregar == null)
+            {
+                formAgregar = new FormAgregarEmpleado();
+
+                formAgregar.EmpleadoAgregado += (s, ev) =>
+                {
+                    var formMostrar = this.MdiChildren
+                        .OfType<FormMostrarEmpleados>()
+                        .FirstOrDefault();
+
+                    if (formMostrar != null)
+                    {
+                        formMostrar.CargarEmpleados();
+                    }
+                };
+
+                formAgregar.MdiParent = this;
+                formAgregar.Dock = DockStyle.Fill;
+                formAgregar.Show();
+            }
+            else
+            {
+                formAgregar.BringToFront();
+                formAgregar.WindowState = FormWindowState.Normal;
+            }
         }
 
         private void btnActualizarEmpleado_Click(object sender, EventArgs e)
@@ -38,7 +63,33 @@ namespace GestorEmpleados
 
         private void btnEliminarEmpleado_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormEliminarEmpleado());
+            // Buscar si ya hay uno abierto
+            var formEliminadosExistente = this.MdiChildren
+                .OfType<FormEmpleadosEliminados>()
+                .FirstOrDefault();
+
+            if (formEliminadosExistente != null)
+            {
+                formEliminadosExistente.BringToFront();
+                formEliminadosExistente.WindowState = FormWindowState.Normal;
+                return;
+            }
+
+            // Crear uno nuevo
+            FormEmpleadosEliminados formEliminados = new FormEmpleadosEliminados();
+            formEliminados.MdiParent = this;
+            formEliminados.Dock = DockStyle.Fill;
+
+            var formMostrar = this.MdiChildren
+                .OfType<FormMostrarEmpleados>()
+                .FirstOrDefault();
+
+            if (formMostrar != null)
+            {
+                formMostrar.ConectarEventos(formEliminados);
+            }
+
+            formEliminados.Show();
         }
 
         private void btnExportarCSV_Click(object sender, EventArgs e)
@@ -52,18 +103,27 @@ namespace GestorEmpleados
             Application.Exit();
         }
 
-        private void AbrirFormulario(Form formularioHijo)
+        private void AbrirFormulario(Form nuevoFormulario)
         {
-            // Cierra formularios hijos abiertos
-            foreach (Form frm in this.MdiChildren)
-            {
-                frm.Close();
-            }
+            var formularioExistente = this.MdiChildren
+                .FirstOrDefault(f => f.GetType() == nuevoFormulario.GetType() && !f.IsDisposed);
 
-            formularioHijo.MdiParent = this;
-            formularioHijo.Dock = DockStyle.Fill;
-            formularioHijo.Show();
+            if (formularioExistente != null)
+            {
+                formularioExistente.BringToFront();
+                formularioExistente.WindowState = FormWindowState.Normal;
+            }
+            else
+            {
+                nuevoFormulario.MdiParent = this;
+                nuevoFormulario.Dock = DockStyle.Fill;
+                nuevoFormulario.Show();
+            }
         }
 
+        private string GetDebuggerDisplay()
+        {
+            return ToString();
+        }
     }
 }

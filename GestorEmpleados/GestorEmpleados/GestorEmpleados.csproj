@@ -60,11 +60,11 @@
     <Compile Include="FormAgregarEmpleado.Designer.cs">
       <DependentUpon>FormAgregarEmpleado.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormEliminarEmpleado.cs">
+    <Compile Include="FormEmpleadosEliminados.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormEliminarEmpleado.Designer.cs">
-      <DependentUpon>FormEliminarEmpleado.cs</DependentUpon>
+    <Compile Include="FormEmpleadosEliminados.Designer.cs">
+      <DependentUpon>FormEmpleadosEliminados.cs</DependentUpon>
     </Compile>
     <Compile Include="FormExportarCSV.cs">
       <SubType>Form</SubType>
@@ -88,6 +88,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAgregarEmpleado.resx">
       <DependentUpon>FormAgregarEmpleado.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormEmpleadosEliminados.resx">
+      <DependentUpon>FormEmpleadosEliminados.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

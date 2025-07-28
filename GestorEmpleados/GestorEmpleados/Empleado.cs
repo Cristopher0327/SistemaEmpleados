@@ -57,6 +57,10 @@ namespace GestorEmpleados
                     return Salario * 0.25M;
             }
         }
+
+        public decimal iSR { get; internal set; }
+        public int TiempoEnEmpresaMeses { get; internal set; }
+        public int TiempoEnEmpresaAnios { get; internal set; }
     }
 }
 

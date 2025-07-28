@@ -7,36 +7,37 @@ namespace GestorEmpleados
 {
     public partial class FormMostrarEmpleados : Form
     {
+        private bool eliminando = false;
+
         public FormMostrarEmpleados()
         {
             InitializeComponent();
 
-            // Botón cerrar
             btnCerrar.Click += BtnCerrar_Click;
 
-            // Selección completa de la fila al hacer clic
+            // Asignar evento Click correctamente
+            btnEliminarSeleccionado.Click += btnEliminarSeleccionado_Click;
+
             dgvEmpleados.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Evento que se ejecuta al cargar el formulario
             this.Load += FormMostrarEmpleados_Load;
         }
 
-        // Evento del boton cerrar
         private void BtnCerrar_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        
         private void FormMostrarEmpleados_Load(object sender, EventArgs e)
         {
             CargarEmpleados();
         }
 
-        // Carga la lista completa de empleados al dgvEmpleados
-        private void CargarEmpleados()
+        public void CargarEmpleados()
         {
             var empleados = EmpleadoManager.ListaEmpleados;
+
+            dgvEmpleados.DataSource = null;
 
             if (empleados.Count == 0)
             {
@@ -44,16 +45,18 @@ namespace GestorEmpleados
                 return;
             }
 
-            dgvEmpleados.DataSource = null;
             dgvEmpleados.DataSource = empleados;
+            dgvEmpleados.ClearSelection();
+            dgvEmpleados.CurrentCell = null; // Evita selección automática al cargar
         }
 
-        // para buscar un empleado por su ID
         private void btnBusqueda_Click(object sender, EventArgs e)
         {
             if (int.TryParse(tbBusquedaEmpleado.Text.Trim(), out int idBuscado))
             {
                 var empleado = EmpleadoManager.ListaEmpleados.FirstOrDefault(emp => emp.ID == idBuscado);
+
+                dgvEmpleados.DataSource = null;
 
                 if (empleado != null)
                 {
@@ -62,8 +65,10 @@ namespace GestorEmpleados
                 else
                 {
                     MessageBox.Show("No se encontró un empleado con ese ID.", "Búsqueda", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvEmpleados.DataSource = null;
                 }
+
+                dgvEmpleados.ClearSelection();
+                dgvEmpleados.CurrentCell = null;
             }
             else
             {
@@ -71,11 +76,84 @@ namespace GestorEmpleados
             }
         }
 
-        // Botón para mostrar todos los empleados nuevamente
         private void btnMostrar_Click(object sender, EventArgs e)
         {
-            dgvEmpleados.DataSource = null;
-            dgvEmpleados.DataSource = EmpleadoManager.ListaEmpleados;
+            CargarEmpleados();
+        }
+
+        private void btnEliminarSeleccionado_Click(object sender, EventArgs e)
+        {
+            if (eliminando) return;
+
+            if (dgvEmpleados.CurrentRow == null)
+            {
+                MessageBox.Show("No hay ningún empleado seleccionado para eliminar.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var empleado = dgvEmpleados.CurrentRow.DataBoundItem as Empleado;
+
+            if (empleado == null)
+            {
+                MessageBox.Show("Error al obtener el empleado seleccionado.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var confirmar = MessageBox.Show($"¿Estás seguro de eliminar al empleado {empleado.Nombre}?",
+                                            "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (confirmar == DialogResult.No)
+            {
+                return;
+            }
+
+            eliminando = true;
+
+            try
+            {
+                EmpleadoManager.ListaEmpleados.RemoveAll(emp => emp.ID == empleado.ID);
+                EmpleadoManager.EmpleadosEliminados.Add(empleado);
+
+                CargarEmpleados();
+                dgvEmpleados.ClearSelection();
+                dgvEmpleados.CurrentCell = null;
+
+                MessageBox.Show("Empleado eliminado correctamente. Puedes restaurarlo desde el historial.",
+                                "Eliminado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            finally
+            {
+                eliminando = false;
+            }
+        }
+
+        // ✅ ESTE MÉTODO PERMITE ACTUALIZAR AUTOMÁTICAMENTE SIN ABRIR VENTANAS
+        internal void SuscribirFormulario(FormEmpleadosEliminados formEliminados)
+        {
+            // Cuando se restaura o vacía un empleado desde el formulario de eliminados...
+            formEliminados.EmpleadoRestauradoOEliminado += (s, e) =>
+            {
+                CargarEmpleados(); // ...recarga automáticamente los datos en este formulario.
+            };
+        }
+
+        internal void ConectarEventos(FormEmpleadosEliminados formEliminados)
+        {
+            formEliminados.EmpleadoRestauradoOEliminado -= FormEliminados_EmpleadoRestauradoOEliminado;
+            formEliminados.EmpleadoRestauradoOEliminado += FormEliminados_EmpleadoRestauradoOEliminado;
+        }
+
+        private void FormEliminados_EmpleadoRestauradoOEliminado(object sender, EventArgs e)
+        {
+            CargarEmpleados(); // Refresca el DataGridView
+        }
+
+        private void dgvEmpleados_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
+
+
+
