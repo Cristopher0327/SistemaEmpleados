@@ -127,7 +127,7 @@ namespace GestorEmpleados
             }
         }
 
-        // ✅ ESTE MÉTODO PERMITE ACTUALIZAR AUTOMÁTICAMENTE SIN ABRIR VENTANAS
+        // con este metodo se actualiza sin tener que abrir ventanas 
         internal void SuscribirFormulario(FormEmpleadosEliminados formEliminados)
         {
             // Cuando se restaura o vacía un empleado desde el formulario de eliminados...
