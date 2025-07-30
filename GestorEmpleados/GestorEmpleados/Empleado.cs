@@ -12,7 +12,7 @@ namespace GestorEmpleados
         public string Nombre { get; set; }
         public string Departamento { get; set; }
         public string Cargo { get; set; }
-        public string Estado { get; set; } 
+        public string Estado { get; set; }
         public DateTime FechaInicio { get; set; }
         public decimal Salario { get; set; }
 
@@ -57,10 +57,6 @@ namespace GestorEmpleados
                     return Salario * 0.25M;
             }
         }
-
-        public decimal iSR { get; internal set; }
-        public int TiempoEnEmpresaMeses { get; internal set; }
-        public int TiempoEnEmpresaAnios { get; internal set; }
     }
 }
 
