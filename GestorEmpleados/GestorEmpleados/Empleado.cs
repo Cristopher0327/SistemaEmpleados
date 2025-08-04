@@ -57,6 +57,12 @@ namespace GestorEmpleados
                     return Salario * 0.25M;
             }
         }
+
+        public object Apellido { get; internal set; }
+        public object Sueldo { get; internal set; }
+        public object FechaNacimiento { get; internal set; }
+
+       
     }
 }
 

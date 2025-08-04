@@ -136,6 +136,7 @@
             this.Name = "FormMain";
             this.Text = "Gestor de Empleados.\n";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.panelMenu.ResumeLayout(false);
             this.ResumeLayout(false);
 

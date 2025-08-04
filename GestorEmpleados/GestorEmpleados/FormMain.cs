@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -94,9 +95,36 @@ namespace GestorEmpleados
 
         private void btnExportarCSV_Click(object sender, EventArgs e)
         {
-            AbrirFormulario(new FormExportarCSV());
-            MessageBox.Show("Los datos fueron exportados a CSV.");
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Archivo CSV (*.csv)|*.csv";
+            saveFileDialog.Title = "Guardar empleados como CSV";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName))
+                    {
+                        // Cabecera con punto y coma como separador
+                        writer.WriteLine("ID;Nombre;Apellido;Cargo;Sueldo;FechaNacimiento");
+
+                        foreach (Empleado emp in EmpleadoManager.ListaEmpleados)
+                        {
+                            // Línea de datos con punto y coma como separador
+                            writer.WriteLine($"{emp.ID};{emp.Nombre};{emp.Apellido};{emp.Cargo};{emp.Salario};{emp.FechaNacimiento:dd/MM/yyyy}");
+                        }
+                    }
+
+                    MessageBox.Show("Empleados exportados correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al exportar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
+
+
 
         private void btnSalir_Click(object sender, EventArgs e)
         {
@@ -124,6 +152,17 @@ namespace GestorEmpleados
         private string GetDebuggerDisplay()
         {
             return ToString();
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+
+
+
+
+
+
+            
         }
     }
 }

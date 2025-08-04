@@ -46,6 +46,12 @@ namespace GestorEmpleados
             }
 
             dgvEmpleados.DataSource = empleados;
+
+            // Dejar visible FechaNacimiento (eliminado el ocultamiento)
+            // Si hay columnas que sí quieras ocultar, déjalas aquí
+            if (dgvEmpleados.Columns["Sueldo"] != null)
+                dgvEmpleados.Columns["Sueldo"].Visible = false;
+
             dgvEmpleados.ClearSelection();
             dgvEmpleados.CurrentCell = null; // Evita selección automática al cargar
         }
@@ -61,6 +67,10 @@ namespace GestorEmpleados
                 if (empleado != null)
                 {
                     dgvEmpleados.DataSource = new List<Empleado> { empleado };
+
+                    // Mostrar FechaNacimiento en búsqueda (no la ocultamos)
+                    if (dgvEmpleados.Columns["Sueldo"] != null)
+                        dgvEmpleados.Columns["Sueldo"].Visible = false;
                 }
                 else
                 {
@@ -154,6 +164,5 @@ namespace GestorEmpleados
         }
     }
 }
-
 
 

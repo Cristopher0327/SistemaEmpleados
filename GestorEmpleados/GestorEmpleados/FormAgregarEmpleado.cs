@@ -6,7 +6,6 @@ namespace GestorEmpleados
 {
     public partial class FormAgregarEmpleado : Form
     {
-        // Evento para notificar que se agregó un empleado
         public event EventHandler EmpleadoAgregado;
 
         private const decimal SALARIO_MAXIMO = 1000000m;
@@ -14,38 +13,39 @@ namespace GestorEmpleados
         public FormAgregarEmpleado()
         {
             InitializeComponent();
-            CargarComboBox();          // Llena los ComboBox con datos
-            GenerarID();               // Genera automáticamente el ID
-            AsociarValidaciones();     // Valida letras y números en campos
+            CargarComboBox();
+            GenerarID();
+            AsociarValidaciones();
 
-            // Eventos para recalcular descuentos al cambiar salario o fecha
             tbSalario.TextChanged += tbSalario_TextChanged;
             dtpFechaInicio.ValueChanged += dtpFechaInicio_ValueChanged;
+
+            // Desactivar escritura manual en los ComboBox
+            cmbDepartamento.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbEstado.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        // Agrega las opciones a los ComboBox
         private void CargarComboBox()
         {
             cmbDepartamento.Items.AddRange(new string[] {
                 "Administración", "IT", "Recursos Humanos", "Ventas", "Finanzas y Contabilidad",
-                "Marketing", "Logística y Almacén", "Atención al cliente", "Ventas", "Producción y Operaciones"
+                "Marketing", "Logística y Almacén", "Atención al cliente", "Producción y Operaciones"
             });
             cmbEstado.Items.AddRange(new string[] { "Vigente", "No Vigente" });
         }
 
-        // Genera un ID nuevo y lo bloquea para edición
         private void GenerarID()
         {
             tbIDempleado.Text = EmpleadoManager.GenerarNuevoID().ToString();
             tbIDempleado.ReadOnly = true;
         }
 
-        // Valida ingreso de letras o números según el campo
         private void AsociarValidaciones()
         {
-            tbNombre.KeyPress += SoloLetras;
+            tbNombre.KeyPress += SoloLetrasConMensaje;
+            tbApellido.KeyPress += SoloLetrasConMensaje;
             tbCargo.KeyPress += SoloLetras;
-            tbSalario.KeyPress += SoloNumeros;
+            tbSalario.KeyPress += SoloNumerosConMensaje;
         }
 
         private void SoloLetras(object sender, KeyPressEventArgs e)
@@ -54,12 +54,24 @@ namespace GestorEmpleados
                 e.Handled = true;
         }
 
-        private void SoloNumeros(object sender, KeyPressEventArgs e)
+        private void SoloLetrasConMensaje(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsLetter(e.KeyChar) && !char.IsWhiteSpace(e.KeyChar))
+            {
+                e.Handled = true;
+                MessageBox.Show("Solo se permiten letras en este campo.", "Entrada inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void SoloNumerosConMensaje(object sender, KeyPressEventArgs e)
         {
             TextBox tb = sender as TextBox;
 
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '.')
+            {
                 e.Handled = true;
+                MessageBox.Show("Solo se permiten números en el salario.", "Entrada inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
 
             if (e.KeyChar == '.' && tb.Text.Contains('.'))
                 e.Handled = true;
@@ -89,7 +101,6 @@ namespace GestorEmpleados
             CalcularDescuentosYTiempo();
         }
 
-        // Cálculo de AFP, ARS, ISR y tiempo en la empresa
         private void CalcularDescuentosYTiempo()
         {
             if (!decimal.TryParse(tbSalario.Text, out decimal salario) || salario <= 0)
@@ -98,17 +109,16 @@ namespace GestorEmpleados
                 return;
             }
 
-            // Cálculo de tiempo trabajado
             TimeSpan diferencia = DateTime.Now - dtpFechaInicio.Value;
             int años = diferencia.Days / 365;
             int meses = (diferencia.Days % 365) / 30;
+
+            // Esta línea es la que muestra el tiempo en la empresa correctamente
             lblTiempoEmpresa.Text = $"{años} años y {meses} meses";
 
-            // Cálculo AFP y ARS
             decimal afp = salario * 0.0287m;
             decimal ars = salario * 0.0304m;
 
-            // Cálculo ISR
             decimal salarioAnual = salario * 12;
             decimal isr = 0;
 
@@ -124,7 +134,7 @@ namespace GestorEmpleados
             lblISR.Text = isr > 0 ? $"${(isr / 12):N2} mensual" : "Exento";
         }
 
-        // Limpia los labels de los cálculos cuando el salario no es válido
+
         private void LimpiarDescuentos()
         {
             lblAFP.Text = "";
@@ -133,10 +143,9 @@ namespace GestorEmpleados
             lblTiempoEmpresa.Text = "";
         }
 
-        // Validación y guardado del empleado
         private void btnGuardar_Click(object sender, EventArgs e)
         {
-            if (tbNombre.Text.Trim() == "" || tbCargo.Text.Trim() == "" ||
+            if (tbNombre.Text.Trim() == "" || tbApellido.Text.Trim() == "" || tbCargo.Text.Trim() == "" ||
                 cmbDepartamento.SelectedIndex == -1 || cmbEstado.SelectedIndex == -1 || tbSalario.Text.Trim() == "")
             {
                 MessageBox.Show("Todos los campos son obligatorios.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -161,22 +170,26 @@ namespace GestorEmpleados
                 return;
             }
 
-            // Crea nuevo objeto empleado con los datos ingresados
+            if (dtpFechaNacimiento.Value >= DateTime.Now || CalcularEdad(dtpFechaNacimiento.Value) < 16)
+            {
+                MessageBox.Show("La fecha de nacimiento es inválida. El empleado debe tener al menos 19 años.", "Fecha inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             Empleado nuevoEmpleado = new Empleado
             {
                 ID = int.Parse(tbIDempleado.Text),
                 Nombre = tbNombre.Text.Trim(),
+                Apellido = tbApellido.Text.Trim(),
                 Cargo = tbCargo.Text.Trim(),
                 Departamento = cmbDepartamento.SelectedItem.ToString(),
                 Estado = cmbEstado.SelectedItem.ToString(),
                 FechaInicio = dtpFechaInicio.Value,
+                FechaNacimiento = dtpFechaNacimiento.Value,
                 Salario = salario
             };
 
-            // Guarda el empleado en la base de datos o lista
             EmpleadoManager.AgregarEmpleado(nuevoEmpleado);
-
-            // Notifica a otros formularios que se agregó un empleado
             EmpleadoAgregado?.Invoke(this, EventArgs.Empty);
 
             MessageBox.Show("Empleado guardado exitosamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -185,26 +198,36 @@ namespace GestorEmpleados
             GenerarID();
         }
 
-        private void btnCancelar_Click(object sender, EventArgs e)
+        private int CalcularEdad(DateTime fechaNacimiento)
         {
-            this.Close(); // Cierra el formulario
+            var hoy = DateTime.Today;
+            int edad = hoy.Year - fechaNacimiento.Year;
+            if (fechaNacimiento.Date > hoy.AddYears(-edad)) edad--;
+            return edad;
         }
 
-        // Limpia todos los campos para volver a agregar otro
+        private void btnCancelar_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
         private void LimpiarCampos()
         {
             tbNombre.Clear();
+            tbApellido.Clear();
             tbCargo.Clear();
             tbSalario.Clear();
             cmbDepartamento.SelectedIndex = -1;
             cmbEstado.SelectedIndex = -1;
             dtpFechaInicio.Value = DateTime.Today;
+            dtpFechaNacimiento.Value = DateTime.Today;
             LimpiarDescuentos();
         }
 
         private void FormAgregarEmpleado_Load(object sender, EventArgs e)
         {
-            // No se usa, pero queda disponible para inicialización futura
+            // No se requiere código aquí por ahora
         }
     }
 }
+
