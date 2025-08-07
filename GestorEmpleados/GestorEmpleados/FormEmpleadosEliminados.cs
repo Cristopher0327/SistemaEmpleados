@@ -117,6 +117,11 @@ namespace GestorEmpleados
                 EmpleadoRestauradoOEliminado?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        private void FormEmpleadosEliminados_Load_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
 

@@ -95,6 +95,9 @@
     <EmbeddedResource Include="FormEmpleadosEliminados.resx">
       <DependentUpon>FormEmpleadosEliminados.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormExportarCSV.resx">
+      <DependentUpon>FormExportarCSV.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
