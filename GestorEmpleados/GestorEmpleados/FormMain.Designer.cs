@@ -52,18 +52,18 @@
             this.panelMenu.Controls.Add(this.btnMostrarEmpleados);
             this.panelMenu.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelMenu.Location = new System.Drawing.Point(0, 0);
-            this.panelMenu.Margin = new System.Windows.Forms.Padding(4);
             this.panelMenu.Name = "panelMenu";
-            this.panelMenu.Size = new System.Drawing.Size(341, 790);
+            this.panelMenu.Size = new System.Drawing.Size(256, 632);
             this.panelMenu.TabIndex = 1;
             // 
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Constantia", 22.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(61, 25);
+            this.label1.Location = new System.Drawing.Point(46, 20);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(207, 74);
+            this.label1.Size = new System.Drawing.Size(155, 59);
             this.label1.TabIndex = 6;
             this.label1.Text = "Menú";
             // 
@@ -71,10 +71,9 @@
             // 
             this.btnExportarCSV.BackColor = System.Drawing.Color.CadetBlue;
             this.btnExportarCSV.Font = new System.Drawing.Font("Constantia", 10.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnExportarCSV.Location = new System.Drawing.Point(51, 566);
-            this.btnExportarCSV.Margin = new System.Windows.Forms.Padding(4);
+            this.btnExportarCSV.Location = new System.Drawing.Point(38, 453);
             this.btnExportarCSV.Name = "btnExportarCSV";
-            this.btnExportarCSV.Size = new System.Drawing.Size(217, 94);
+            this.btnExportarCSV.Size = new System.Drawing.Size(163, 75);
             this.btnExportarCSV.TabIndex = 5;
             this.btnExportarCSV.Text = "\tExportar a CSV";
             this.btnExportarCSV.UseVisualStyleBackColor = false;
@@ -84,10 +83,9 @@
             // 
             this.btnSalir.BackColor = System.Drawing.Color.Crimson;
             this.btnSalir.Font = new System.Drawing.Font("Constantia", 10.125F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSalir.Location = new System.Drawing.Point(51, 686);
-            this.btnSalir.Margin = new System.Windows.Forms.Padding(4);
+            this.btnSalir.Location = new System.Drawing.Point(38, 549);
             this.btnSalir.Name = "btnSalir";
-            this.btnSalir.Size = new System.Drawing.Size(217, 64);
+            this.btnSalir.Size = new System.Drawing.Size(163, 51);
             this.btnSalir.TabIndex = 4;
             this.btnSalir.Text = "Salir";
             this.btnSalir.UseVisualStyleBackColor = false;
@@ -97,10 +95,9 @@
             // 
             this.btnActualizarEmpleado.BackColor = System.Drawing.Color.CadetBlue;
             this.btnActualizarEmpleado.Font = new System.Drawing.Font("Constantia", 10.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnActualizarEmpleado.Location = new System.Drawing.Point(51, 342);
-            this.btnActualizarEmpleado.Margin = new System.Windows.Forms.Padding(4);
+            this.btnActualizarEmpleado.Location = new System.Drawing.Point(38, 274);
             this.btnActualizarEmpleado.Name = "btnActualizarEmpleado";
-            this.btnActualizarEmpleado.Size = new System.Drawing.Size(217, 98);
+            this.btnActualizarEmpleado.Size = new System.Drawing.Size(163, 78);
             this.btnActualizarEmpleado.TabIndex = 3;
             this.btnActualizarEmpleado.Text = "Actualizar empleado";
             this.btnActualizarEmpleado.UseVisualStyleBackColor = false;
@@ -110,10 +107,9 @@
             // 
             this.btnEliminarEmpleado.BackColor = System.Drawing.Color.CadetBlue;
             this.btnEliminarEmpleado.Font = new System.Drawing.Font("Constantia", 10.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnEliminarEmpleado.Location = new System.Drawing.Point(51, 458);
-            this.btnEliminarEmpleado.Margin = new System.Windows.Forms.Padding(4);
+            this.btnEliminarEmpleado.Location = new System.Drawing.Point(38, 366);
             this.btnEliminarEmpleado.Name = "btnEliminarEmpleado";
-            this.btnEliminarEmpleado.Size = new System.Drawing.Size(217, 100);
+            this.btnEliminarEmpleado.Size = new System.Drawing.Size(163, 80);
             this.btnEliminarEmpleado.TabIndex = 2;
             this.btnEliminarEmpleado.Text = "Empleados Eliminados";
             this.btnEliminarEmpleado.UseVisualStyleBackColor = false;
@@ -123,10 +119,9 @@
             // 
             this.btnAgregarEmpleado.BackColor = System.Drawing.Color.CadetBlue;
             this.btnAgregarEmpleado.Font = new System.Drawing.Font("Constantia", 10.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnAgregarEmpleado.Location = new System.Drawing.Point(51, 227);
-            this.btnAgregarEmpleado.Margin = new System.Windows.Forms.Padding(4);
+            this.btnAgregarEmpleado.Location = new System.Drawing.Point(38, 182);
             this.btnAgregarEmpleado.Name = "btnAgregarEmpleado";
-            this.btnAgregarEmpleado.Size = new System.Drawing.Size(217, 98);
+            this.btnAgregarEmpleado.Size = new System.Drawing.Size(163, 78);
             this.btnAgregarEmpleado.TabIndex = 1;
             this.btnAgregarEmpleado.Text = "Agregar empleado";
             this.btnAgregarEmpleado.UseVisualStyleBackColor = false;
@@ -136,10 +131,9 @@
             // 
             this.btnMostrarEmpleados.BackColor = System.Drawing.Color.CadetBlue;
             this.btnMostrarEmpleados.Font = new System.Drawing.Font("Constantia", 10.125F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnMostrarEmpleados.Location = new System.Drawing.Point(51, 104);
-            this.btnMostrarEmpleados.Margin = new System.Windows.Forms.Padding(4);
+            this.btnMostrarEmpleados.Location = new System.Drawing.Point(38, 83);
             this.btnMostrarEmpleados.Name = "btnMostrarEmpleados";
-            this.btnMostrarEmpleados.Size = new System.Drawing.Size(217, 108);
+            this.btnMostrarEmpleados.Size = new System.Drawing.Size(163, 86);
             this.btnMostrarEmpleados.TabIndex = 0;
             this.btnMostrarEmpleados.Text = "Mostrar empleados";
             this.btnMostrarEmpleados.UseVisualStyleBackColor = false;
@@ -147,13 +141,15 @@
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightBlue;
-            this.ClientSize = new System.Drawing.Size(1093, 790);
+            this.BackgroundImage = global::GestorEmpleados.Properties.Resources.Captura_de_pantalla_2025_08_07_212754;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.ClientSize = new System.Drawing.Size(1640, 632);
             this.Controls.Add(this.panelMenu);
+            this.DoubleBuffered = true;
             this.IsMdiContainer = true;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormMain";
             this.Text = "C&P Systems - Gestor de Empleados";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
